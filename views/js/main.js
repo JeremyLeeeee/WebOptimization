@@ -497,14 +497,8 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
-  var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    var phase = Math.sin((scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-  }
-
+  // Add a requestAnimationFrame method to optimize animation
+  window.requestAnimationFrame(callback);
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
   window.performance.mark("mark_end_frame");
@@ -513,6 +507,16 @@ function updatePositions() {
     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
     logAverageFrame(timesToUpdatePosition);
   }
+}
+
+// Code removed from updatePositions() goes here, also use transform instead of left
+function callback(){
+    var items = document.querySelectorAll('.mover');
+    for (var i = 0; i < items.length; i++) {
+        var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var phase = Math.sin((scrollTop / 1250) + (i % 5));
+        items[i].style.transform = "translateX("+ (100 * phase) +"px)";
+    }
 }
 
 // 在页面滚动时运行updatePositions函数
@@ -530,6 +534,10 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    // In the callback function we used transform instead of left, so here we need to reinitialize
+    elem.style.left = elem.basicLeft + 'px';
+    elem.style['separate'] = "transform";
+
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
   updatePositions();
