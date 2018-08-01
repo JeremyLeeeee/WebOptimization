@@ -23,8 +23,11 @@ the speed for loading these images increase.
 ####Part 2: FPS for pizza.html
 
 For this part, you need to turn on the FPS meter provided by Chrome and after that you just navigate to the pizza.html 
-page and start scrolling and see what the FPS is. As I was testing, the FPS is generally 70 to 100, which is much higher 
-than 60, but at some point it would drop below 60.
+page and start scrolling and see what the FPS is. As I was testing, the FPS is generally around 60, but at some point it
+would drop below 60.
 1. In updatePositions(), I used a requestAnimationFrame(callback) to increase performance.
 2. The code removed from updatePositions() is put inside the callback() function and I used transform instead of left, 
 this requires me to make some changes at the end of the DOMContentLoaded listener as well.
+3. Since every pizza generated is the same, I removed some of the code in the loop.
+4. Replace all the query with getElementbyId or getElementsbyClass
+5. Calculate the number of pizza needed so we do not have to do more loops than necessary.

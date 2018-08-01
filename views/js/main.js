@@ -403,13 +403,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.querySelector("#pizzaSize").innerHTML = "Small";
+        document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.querySelector("#pizzaSize").innerHTML = "Large";
+        document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -421,7 +421,7 @@ var resizePizzas = function(size) {
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // 将值转成百分比宽度
@@ -443,14 +443,18 @@ var resizePizzas = function(size) {
 
     return dx;
   }
+  // Create a variable so we do not have to query it all the time
+  var pizza = document.getElementsByClassName("randomPizzaContainer");
 
   // 遍历披萨的元素并改变它们的宽度
+  // Every pizza is basically the same, so we do not have to put some of the code in the loop
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
-    }
+      var dx = determineDx(pizza[0], size);
+      var newwidth = (pizza[0].offsetWidth + dx) + 'px';
+
+      for (var i = 0; i < pizza.length; i++) {
+          pizza[i].style.width = newwidth;
+      }
   }
 
   changePizzaSizes(size);
@@ -511,7 +515,7 @@ function updatePositions() {
 
 // Code removed from updatePositions() goes here, also use transform instead of left
 function callback(){
-    var items = document.querySelectorAll('.mover');
+    var items = document.getElementsByClassName('mover');
     for (var i = 0; i < items.length; i++) {
         var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         var phase = Math.sin((scrollTop / 1250) + (i % 5));
@@ -526,7 +530,9 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  // Calculate the pizza needed so we do not have to do more loops than necessary
+  var number = (window.innerHeight / 75) + (window.innerWidth / 75);
+  for (var i = 0; i < number; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -538,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.left = elem.basicLeft + 'px';
     elem.style['separate'] = "transform";
 
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
