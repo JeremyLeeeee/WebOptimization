@@ -55,3 +55,5 @@
 
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+https://github.com/typekit/webfontloader#modules
+https://compressjpeg.com/
